@@ -47,14 +47,45 @@ void Push(PriorityQueue *priorityqueue_variable, int current_vertex, double accu
     while(i>0 && priorityqueue_variable->nodes[(i-1)/2].accumulated_reliability < accumulated_reliability){
 
         priorityqueue_variable->nodes[i] = priorityqueue_variable->nodes[(i-1)/2];
+
         i = (i-1)/2;
 
         priorityqueue_variable->nodes[i].current_vertex = current_vertex;
-
         priorityqueue_variable->nodes[i].accumulated_reliability = accumulated_reliability;
 
     }
 
 }
+
+
+//função para remoção do nó com maior confiabilidade
+PriorityQueueNode Remove_MorePriority(PriorityQueue *priorityqueue_variable){
+    
+    PriorityQueueNode root = priorityqueue_variable->nodes[0];
+    priorityqueue_variable->current_size--;
+    PriorityQueueNode last_node = priorityqueue_variable->nodes[priorityqueue_variable->current_size];
+
+    int i = 0, heap_adjusted = 0, left_child;
+
+    while (!heap_adjusted && (left_child = 2*i+1) < priorityqueue_variable->current_size){
+
+        if (left_child + 1 < priorityqueue_variable->current_size && priorityqueue_variable->nodes[left_child].accumulated_reliability < priorityqueue_variable->nodes[left_child + 1].accumulated_reliability)
+        left_child++;
+
+        if (last_node.accumulated_reliability >= priorityqueue_variable->nodes[left_child].accumulated_reliability)
+        heap_adjusted = 1;
+
+        else {
+            priorityqueue_variable->nodes[i] = priorityqueue_variable->nodes[left_child];
+            i = left_child;
+        }
+
+    }
+
+    priorityqueue_variable->nodes[i] = last_node;
+    return root;
+
+}
+
 
 
