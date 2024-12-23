@@ -148,6 +148,24 @@ void Clean_Up_Resources(PriorityQueue *priorityqueue_variable, double *reliabili
 
 }
 
+//função 10: calcula o caminho mais confiável entre dois vértices
+double Find_MostReliableWay(Graph *graph, int start, int endgame){
+
+    double *reliabilities = Initialize_Reliabilities(graph->number_vertices, start);
+
+    PriorityQueue *priorityqueue_variable = Create_PriorityQueue(graph->number_vertices);
+
+    Push(priorityqueue_variable, start, 1.0);
+
+    double result = Process_PriorityQueue(graph, priorityqueue_variable, reliabilities, start, endgame);
+
+    Clean_Up_Resources(priorityqueue_variable, reliabilities);
+
+    return result;
+
+}
+
+
 
 
 
