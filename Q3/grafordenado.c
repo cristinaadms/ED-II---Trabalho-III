@@ -3,7 +3,7 @@
 #include <grafordenado.h>
 
 
-//função para inicialização do grafo
+//função 1: para inicialização do grafo
 Graph *Create_Graph(int number_vertices, int number_edges){
 
     Graph *graph = (Graph*)malloc(sizeof(Graph));
@@ -17,7 +17,7 @@ Graph *Create_Graph(int number_vertices, int number_edges){
 
 }
 
-//função para adição de uma aresta no grafo
+//função 2: para adição de uma aresta no grafo
 void Add_Edge(Graph *graph, int edge_index, int origin_vertex, int destination_vertex, double edge_reliability){
 
     graph->edgelist[edge_index].origin_vertex = origin_vertex;
@@ -26,7 +26,7 @@ void Add_Edge(Graph *graph, int edge_index, int origin_vertex, int destination_v
 
 }
 
-//função para inicialização da fila de prioridade
+//função 3: para inicialização da fila de prioridade
 PriorityQueue *Create_PriorityQueue(int maximum_capacity){
 
     PriorityQueue *priorityqueue = (PriorityQueue*)malloc(sizeof(PriorityQueue));
@@ -39,7 +39,7 @@ PriorityQueue *Create_PriorityQueue(int maximum_capacity){
 
 }
 
-//função para inserção de um nó na fila de prioridade com um vértice e sua confiabilidade
+//função 4: para inserção de um nó na fila de prioridade com um vértice e sua confiabilidade
 void Push(PriorityQueue *priorityqueue_variable, int current_vertex, double accumulated_reliability){
 
     int i = priorityqueue_variable->current_size++;
@@ -58,7 +58,7 @@ void Push(PriorityQueue *priorityqueue_variable, int current_vertex, double accu
 }
 
 
-//função para remoção do nó com maior confiabilidade
+//função 5: para remoção do nó com maior confiabilidade
 PriorityQueueNode Remove_MorePriority(PriorityQueue *priorityqueue_variable){
     
     PriorityQueueNode root = priorityqueue_variable->nodes[0];
@@ -84,6 +84,18 @@ PriorityQueueNode Remove_MorePriority(PriorityQueue *priorityqueue_variable){
 
     priorityqueue_variable->nodes[i] = last_node;
     return root;
+
+}
+
+//função 6: para inicialização de confiabilidades
+double *Initialize_Reliabilities(int number_vertices, int start){
+
+    double *reliabilities = (double*)malloc(number_vertices*sizeof(double));
+
+    for (int i=0; i<number_vertices;i++) reliabilities[i] = 0.0;
+    reliabilities[start] = 1.0;
+
+    return reliabilities;
 
 }
 
