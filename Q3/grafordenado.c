@@ -116,6 +116,30 @@ void Explore_Edges(Graph *graph, PriorityQueue *priorityqueue_variable, double *
     }
 }
 
+//função 8: para processamento da fila de prioridade
+double Process_PriorityQueue(Graph *graph, PriorityQueue *priorityqueue_variable, double *reliabilities, int start, int endgame){
+
+    double final_reliability = 0.0;
+
+    while(priorityqueue_variable->current_size > 0 && final_reliability == 0.0){
+
+        PriorityQueueNode current = Remove_MorePriority(priorityqueue_variable);
+
+        int origin_vertex = current.current_vertex;
+        double reliability = current.accumulated_reliability;
+
+        if(origin_vertex == endgame){
+            final_reliability = reliability;
+        }else{
+            Explore_Edges(graph, priorityqueue_variable, reliabilities, origin_vertex, reliability);
+        }
+    }
+
+    return final_reliability;
+
+}
+
+
 
 
 
