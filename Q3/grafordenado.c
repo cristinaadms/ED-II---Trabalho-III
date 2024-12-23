@@ -99,5 +99,25 @@ double *Initialize_Reliabilities(int number_vertices, int start){
 
 }
 
+//função 7: para exploração de arestas de um vértice
+void Explore_Edges(Graph *graph, PriorityQueue *priorityqueue_variable, double *reliabilities, int origin_vertex, double reliability){
+
+    for(int i = 0; i < graph->number_edges; i++){
+        if (graph->edgelist[i].origin_vertex == origin_vertex){
+            int destination_vertex = graph->edgelist[i].destination_vertex;
+            double edge_reliability = graph->edgelist[i].edge_reliability;
+            double new_reliability = reliability*edge_reliability;
+
+            if(new_reliability > reliabilities[destination_vertex]){
+                reliabilities[destination_vertex] = new_reliability;
+                Push(priorityqueue_variable, destination_vertex,new_reliability);
+            }
+        }
+    }
+}
+
+
+
+
 
 
