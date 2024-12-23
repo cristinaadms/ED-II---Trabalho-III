@@ -29,7 +29,7 @@ Graph *Create_Graph(int number_vertices, int number_edges);
 void Add_Edge(Graph *graph, int edge_index, int origin_vertex, int destination_vertex, double edge_reliability);
 PriorityQueue *Create_PriorityQueue(int maximum_capacity);
 void Push(PriorityQueue *priorityqueue_variable, int vertex, double accumulated_reliability);
-PriorityQueue Remove_MorePriority(PriorityQueue *priorityqueue_variable);
+PriorityQueueNode Remove_MorePriority(PriorityQueue *priorityqueue_variable);
 double Find_MostReliableWay(Graph *graph, int start, int endgame);
 
 
