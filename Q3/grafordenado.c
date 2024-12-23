@@ -139,6 +139,15 @@ double Process_PriorityQueue(Graph *graph, PriorityQueue *priorityqueue_variable
 
 }
 
+//função 9: para liberação de recursos
+void Clean_Up_Resources(PriorityQueue *priorityqueue_variable, double *reliabilities){
+
+    free(priorityqueue_variable->nodes);
+    free(priorityqueue_variable);
+    free(reliabilities);
+
+}
+
 
 
 
