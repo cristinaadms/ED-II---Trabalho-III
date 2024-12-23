@@ -5,6 +5,7 @@
 
 //função para inicialização do grafo
 Graph *Create_Graph(int number_vertices, int number_edges){
+    
     Graph *graph = (Graph*)malloc(sizeof(Graph));
 
     graph->number_vertices = number_vertices;
@@ -25,3 +26,15 @@ void Add_Edge(Graph *graph, int edge_index, int origin_vertex, int destination_v
 
 }
 
+//função para inicialização da fila de prioridade
+PriorityQueue *Create_PriorityQueue(int maximum_capacity){
+
+    PriorityQueue *priorityqueue = (PriorityQueue*)malloc(sizeof(PriorityQueue));
+    priorityqueue->nodes = (PriorityQueueNode*)malloc(maximum_capacity*sizeof(PriorityQueueNode));
+
+    priorityqueue->current_size = 0;
+    priorityqueue->maximum_capacity = maximum_capacity;
+
+    return priorityqueue;
+
+}
