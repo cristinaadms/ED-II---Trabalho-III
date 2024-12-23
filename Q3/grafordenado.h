@@ -32,5 +32,11 @@ void Push(PriorityQueue *priorityqueue_variable, int vertex, double accumulated_
 PriorityQueueNode Remove_MorePriority(PriorityQueue *priorityqueue_variable);
 double Find_MostReliableWay(Graph *graph, int start, int endgame);
 
+double *Initialize_Reliabilities(int number_vertices, int start);
+double Process_PriorityQueue(Graph *graph, PriorityQueue *priorityqueue_variable, double *reliabilities, int start, int endgame);
+void Explore_Edges(Graph *graph, PriorityQueue *priorityqueue_variable, double *reliabilities, int origin_vertex, double reliability);
+void Clean_Up_Resources(PriorityQueue *priorityqueue_variable, double *reliabilities);
+
+
 
 #endif
