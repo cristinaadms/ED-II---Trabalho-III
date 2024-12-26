@@ -37,6 +37,10 @@ double Process_PriorityQueue(Graph *graph, PriorityQueue *priorityqueue_variable
 void Explore_Edges(Graph *graph, PriorityQueue *priorityqueue_variable, double *reliabilities, int origin_vertex, double reliability);
 void Clean_Up_Resources(PriorityQueue *priorityqueue_variable, double *reliabilities);
 
+void Show_Graph_Info(Graph *graph);
+void Show_Graph_Edges(Graph *graph);
+void Show_Graph(Graph *graph);
+
 
 
 #endif
