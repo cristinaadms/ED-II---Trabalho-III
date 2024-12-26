@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <grafordenado.h>
+#include "grafordenado.h"
 
 
 //função 1: para inicialização do grafo
@@ -164,6 +164,33 @@ double Find_MostReliableWay(Graph *graph, int start, int endgame){
     return result;
 
 }
+
+//função 11: para exibição das informações gerais do grafo
+void Show_Graph_Info(Graph *graph){
+    printf("O grafo contem:\n");
+    printf("%d vertices\n", graph->number_vertices);
+    printf("%d arestas\n", graph->number_edges);
+}
+
+//função 12: para exibição dos detalhes das arestas do grafo
+void Show_Graph_Edges(Graph *graph){
+    for (int i=0; i<graph->number_edges; i++){
+        Edge edge = graph->edgelist[i];
+        printf("Aresta %d -> Origem:%d - Destino:%d - Confiabilidade=%.6lf\n", i, edge.origin_vertex, edge.destination_vertex, edge.edge_reliability);
+    }
+}
+
+//função 13: para exibição do grafo
+void Show_Graph(Graph *graph){
+
+    Show_Graph(graph);
+    printf("Arestas:\n");
+    Show_Graph_Edges(graph);
+}
+
+
+
+
 
 
 
