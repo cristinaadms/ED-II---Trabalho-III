@@ -36,3 +36,16 @@ void Insert_Employee(HashingTable *hash_table, Employee *employee){
 
 }
 
+//função 3: inicialização da tabela hash
+void Initialize_Hash_Table(HashingTable *hash_table, int size){
+
+    hash_table->size = size;
+    hash_table->collisions = 0;
+    hash_table->table = (HashEntry*)malloc(sizeof(HashEntry)*size);
+
+    for(int i=0; i < size; i++){
+        hash_table->table[i].employee = NULL;
+        hash_table->table[i].busy = 0;
+    }
+}
+
