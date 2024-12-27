@@ -19,3 +19,20 @@ int Hash_Function(const char *registration, int table_size){
 
 }
 
+//função 2: para tratamento de colisões
+void Insert_Employee(HashingTable *hash_table, Employee *employee){
+
+    int index_employee;
+    
+    index_employee = Hash_Function(employee->registration, hash_table->size);
+
+    while (hash_table->table[index_employee].busy == 1){
+        index_employee = (index_employee + (employee->registration[0] - '0')) % hash_table->size;
+        hash_table->collisions++;
+    }
+
+    hash_table->table[index_employee].employee = employee;
+    hash_table->table[index_employee].busy = 1;
+
+}
+
