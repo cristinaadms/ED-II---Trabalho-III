@@ -19,16 +19,31 @@ int Hash_Function(const char *registration, int table_size){
 
 }
 
-//função 2: para tratamento de colisões
+//função 2: para substituição de registro quando todas as tentativas falharem
+void Replace_Employee(HashingTable *hash_table, int index_employee){
+
+    free(hash_table->table[index_employee].employee);
+    hash_table->table[index_employee].busy = 0;
+
+}
+
+//função 3: para tratamento de colisões
 void Insert_Employee(HashingTable *hash_table, Employee *employee){
 
-    int index_employee;
+    int index_employee, original_index_employee, replaced =0;
     
     index_employee = Hash_Function(employee->registration, hash_table->size);
+
+    original_index_employee = index_employee;
 
     while (hash_table->table[index_employee].busy == 1){
         index_employee = (index_employee + (employee->registration[0] - '0')) % hash_table->size;
         hash_table->collisions++;
+
+        if(index_employee == original_index_employee){
+            Replace_Employee(hash_table, original_index_employee);
+            replaced = 1;
+        }
     }
 
     hash_table->table[index_employee].employee = employee;
@@ -36,7 +51,7 @@ void Insert_Employee(HashingTable *hash_table, Employee *employee){
 
 }
 
-//função 3: inicialização da tabela de hash
+//função 4: inicialização da tabela de hash
 void Initialize_Hash_Table(HashingTable *hash_table, int size){
 
     hash_table->size = size;
@@ -49,7 +64,7 @@ void Initialize_Hash_Table(HashingTable *hash_table, int size){
     }
 }
 
-//função 4: exibição para verificação dos dados dos funcionários na tabela de hash
+//função 5: exibição para verificação dos dados dos funcionários na tabela de hash
 void Show_Hash_Table(HashingTable *hash_table){
 
     for(int i = 0; i < hash_table->size; i++){
@@ -58,6 +73,8 @@ void Show_Hash_Table(HashingTable *hash_table){
         }
     }
 }
+
+
 
 
 

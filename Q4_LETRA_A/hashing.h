@@ -32,5 +32,6 @@ void Insert_Employee(HashingTable *hash_table, Employee *employee);
 void Initialize_Hash_Table(HashingTable *hash_table, int size);
 void Show_Hash_Table(HashingTable *hash_table);
 
+void Replace_Employee(HashingTable *hash_table, int index_employee);
 
 #endif
