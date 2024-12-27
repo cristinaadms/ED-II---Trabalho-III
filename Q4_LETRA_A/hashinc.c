@@ -74,6 +74,18 @@ void Show_Hash_Table(HashingTable *hash_table){
     }
 }
 
+//função 6: liberação de memória alocada para a tabela de hash
+void Free_Hash_Table(HashingTable *hash_table){
+
+    for(int i=0; i<hash_table->size; i++){
+        if(hash_table->table[i].busy == 1){
+            free(hash_table->table[i].employee);
+        }
+    }
+
+    free(hash_table->table);
+}
+
 
 
 
