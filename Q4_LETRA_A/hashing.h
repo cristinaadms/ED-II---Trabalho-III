@@ -30,7 +30,7 @@ typedef struct hashingtable{
 int Hash_Function(const char *registration, int table_size);
 void Insert_Employee(HashingTable *hash_table, Employee *employee);
 void Initialize_Hash_Table(HashingTable *hash_table, int size);
-void Show_Hash_Table(HashingTable *hashTable);
+void Show_Hash_Table(HashingTable *hash_table);
 
 
 #endif
