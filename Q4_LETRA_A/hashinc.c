@@ -36,7 +36,7 @@ void Insert_Employee(HashingTable *hash_table, Employee *employee){
 
 }
 
-//função 3: inicialização da tabela hash
+//função 3: inicialização da tabela de hash
 void Initialize_Hash_Table(HashingTable *hash_table, int size){
 
     hash_table->size = size;
@@ -48,4 +48,16 @@ void Initialize_Hash_Table(HashingTable *hash_table, int size){
         hash_table->table[i].busy = 0;
     }
 }
+
+//função 4: exibição para verificação dos dados dos funcionários na tabela de hash
+void Show_Hash_Table(HashingTable *hash_table){
+
+    for(int i = 0; i < hash_table->size; i++){
+        if(hash_table->table[i].busy == 1){
+            printf("Index Employee %d: %s - %s - %s - %.2f\n", i, hash_table->table[i].employee->registration, hash_table->table[i].employee->name, hash_table->table[i].employee->function, hash_table->table[i].employee->salary);
+        }
+    }
+}
+
+
 
