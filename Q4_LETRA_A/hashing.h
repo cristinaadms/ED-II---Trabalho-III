@@ -33,5 +33,6 @@ void Initialize_Hash_Table(HashingTable *hash_table, int size);
 void Show_Hash_Table(HashingTable *hash_table);
 
 void Replace_Employee(HashingTable *hash_table, int index_employee);
+void Free_Hash_Table(HashingTable *hash_table);
 
 #endif
