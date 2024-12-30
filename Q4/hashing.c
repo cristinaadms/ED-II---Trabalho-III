@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "hashing.h"
 
 //função para calcular o valor rotacionado com os digitos 3º,4º,5º e 6º
@@ -174,12 +175,50 @@ void Free_Hash_Table(HashingTable *hash_table){
     free(hash_table->table);
 }
 
+//função para medição do tempo de inserção
+double Measure_Insertion_Performance(HashingTable *hash_table, Employee **employees, int num_employees, int hash_case){
+
+    double measure_result;
+
+    clock_t start = clock();
+    for(int i=0; i<num_employees; i++){
+        if(hash_case == 1){ //CASO A
+            Insert_Employee_LA(hash_table, employees[i]);
+        }else if (hash_case == 2){ //CASO B
+            Insert_Employee_LB(hash_table, employees[i]);
+        }
+    }
+    clock_t end = clock();
+
+    measure_result = (double)(end - start)/CLOCKS_PER_SEC;
+
+    return measure_result;
+
+}
+
+//função para comparação do número de colisões
+int Compare_Collisions(HashingTable *hash_table, Employee **employees, int num_employees, int hash_case){
+
+    int collisions_result;
+
+    for(int i=0; i<num_employees; i++){
+        if(hash_case == 1){ //CASO A
+            Insert_Employee_LA(hash_table, employees[i]);
+        }else if (hash_case == 2){ //CASO B
+            Insert_Employee_LB(hash_table, employees[i]);
+        }
+    }
+
+    collisions_result = hash_table->collisions;
+    return collisions_result;
+}
 
 /*
 
 anotações:
 
 1. nas funções de colissões, deveria ter uma condição de parada mais para evitar loops infinitos em tabelas pequenas ou mal preenchidas?
+2. rever as funções de colissões e inserção da letra a
 
 
 */
