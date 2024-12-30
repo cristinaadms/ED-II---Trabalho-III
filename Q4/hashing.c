@@ -27,8 +27,8 @@ void Replace_Employee(HashingTable *hash_table, int index_employee){
 
 }
 
-//função 3: para tratamento de colisões
-void Insert_Employee(HashingTable *hash_table, Employee *employee){
+//função 3: para tratamento de colisões (letra a)
+void Insert_Employee_LA(HashingTable *hash_table, Employee *employee){
 
     int index_employee, original_index_employee, replaced =0;
     
@@ -36,13 +36,33 @@ void Insert_Employee(HashingTable *hash_table, Employee *employee){
 
     original_index_employee = index_employee;
 
-    while (hash_table->table[index_employee].busy == 1){
-        index_employee = (index_employee + (employee->registration[0] - '0')) % hash_table->size;
-        hash_table->collisions++;
+    if(hash_table->table[index_employee].busy == 1){
+        index_employee = Handle_Collision_LA(hash_table, employee->registration, original_index_employee);
 
         if(index_employee == original_index_employee){
             Replace_Employee(hash_table, original_index_employee);
-            replaced = 1;
+        }
+    }
+
+    hash_table->table[index_employee].employee = employee;
+    hash_table->table[index_employee].busy = 1;
+
+}
+
+//função 3: para tratamento de colisões (letra a)
+void Insert_Employee_LB(HashingTable *hash_table, Employee *employee){
+
+    int index_employee, original_index_employee, replaced =0;
+    
+    index_employee = Hash_Function(employee->registration, hash_table->size);
+
+    original_index_employee = index_employee;
+
+    if(hash_table->table[index_employee].busy == 1){
+        index_employee = Handle_Collision_LB(hash_table, employee->registration, original_index_employee);
+
+        if(index_employee == original_index_employee){
+            Replace_Employee(hash_table, original_index_employee);
         }
     }
 
