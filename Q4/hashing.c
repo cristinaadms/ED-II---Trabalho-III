@@ -2,37 +2,92 @@
 #include <stdlib.h>
 #include "hashing.h"
 
-//função 1: para rotacionamento da matrícula para a esquerda e extração dos dígitos solicitados
-int Hash_Function(const char *registration, int table_size){
+//função para calcular o valor rotacionado com os digitos 3º,4º,5º e 6º
+int Calculate_Rotated_Value(const char *registration, int table_size){
 
-    int two_digit_rotation_left, second_digit, fourth_digit, sixth_digit, hash_value;
-    
-    two_digit_rotation_left = ((registration[2] - '0')*1000 + (registration[3] - '0')*100 + (registration[4] - '0')*10 + (registration[5] - '0')) % table_size;
+    int rotated_value;
+
+    rotated_value = ((registration[2] - '0')*1000 + (registration[3] - '0')*100 + (registration[4] - '0')*10 + (registration[5] - '0')) % table_size;
+
+    return rotated_value;
+
+}
+
+//função para extração de dígitos específicos e formação de um número com 2º, 4º e 6º dígitos
+int Extract_Digits(const char *registration){
+
+    int two_digit_rotation_left, second_digit, fourth_digit, sixth_digit, hash_value_aux;
 
     second_digit = registration[1] -'0';
     fourth_digit = registration[3] -'0';
     sixth_digit = registration[5] -'0';
 
-    hash_value = (second_digit*100 + fourth_digit*10 + sixth_digit) % table_size;
+    hash_value_aux = second_digit*100 + fourth_digit*10 + sixth_digit;
+
+    return hash_value_aux;
+
+}
+
+//função para cálculo do índice de hash final
+int Hash_Function_LA(const char *registration, int table_size){
+
+    int rotated_value, extracted_value, hash_value;
+
+    rotated_value = Calculate_Rotated_Value(registration, table_size);
+    extracted_value = Extract_Digits(registration);
+
+    hash_value = extracted_value % table_size;
 
     return hash_value;
 
 }
 
-//função 2: para substituição de registro quando todas as tentativas falharem
+
+//função para fold shift com 3 dígitos (1º, 3º, 6º e 2º, 4º, 5º)
+int Hash_Function_LB(const char *registration, int table_size){
+    int part1, part2, hash_value;
+
+    part1 = (registration[0] - '0')*100 + (registration[2] - '0')*10 + (registration[5] - '0');
+
+    part2 = (registration[1] - '0')*100 + (registration[3] - '0')*10 + (registration[4] - '0');
+
+    hash_value = (part1 + part2) % table_size;
+
+    return hash_value;
+    
+}
+
+//função para substituição de registro quando todas as tentativas falharem
 void Replace_Employee(HashingTable *hash_table, int index_employee){
 
-    free(hash_table->table[index_employee].employee);
-    hash_table->table[index_employee].busy = 0;
+    if(hash_table->table[index_employee].employee != NULL){
+        free(hash_table->table[index_employee].employee);
+        hash_table->table[index_employee].busy = 0;
+    }
+
+    //essa verificação para ver se a matrícula já está ocupada antes de liberar poderia ser movido para as duas funções de insert?
 
 }
 
-//função 3: para tratamento de colisões (letra a)
+//função para tratamento de colisões (letra a)
+int Handle_Collision_LA(HashingTable *hash_table, const char *registration, int original_index){
+
+    int index_employee = original_index;
+
+    do{
+        index_employee = (index_employee + (registration[0] - '0')) % hash_table->size;
+        hash_table->collisions++;
+    }while(hash_table->table[index_employee].busy == 1 && index_employee != original_index);
+
+    return index_employee;
+}
+
+//função para inserção (letra a)
 void Insert_Employee_LA(HashingTable *hash_table, Employee *employee){
 
-    int index_employee, original_index_employee, replaced =0;
+    int index_employee, original_index_employee;
     
-    index_employee = Hash_Function(employee->registration, hash_table->size);
+    index_employee = Hash_Function_LA(employee->registration, hash_table->size);
 
     original_index_employee = index_employee;
 
@@ -49,12 +104,25 @@ void Insert_Employee_LA(HashingTable *hash_table, Employee *employee){
 
 }
 
-//função 3: para tratamento de colisões (letra a)
+//função para tratamento de colisções (lebra b)
+int Handle_Collision_LB(HashingTable *hash_table, const char *registration, int original_index){
+
+    int index_employee = original_index;
+
+    do{
+        index_employee = (index_employee + 7) % hash_table->size;
+        hash_table->collisions++;
+    }while (hash_table->table[index_employee].busy == 1 && index_employee != original_index);
+
+    return index_employee; 
+}
+
+//função para inserção (letra b)
 void Insert_Employee_LB(HashingTable *hash_table, Employee *employee){
 
-    int index_employee, original_index_employee, replaced =0;
+    int index_employee, original_index_employee;
     
-    index_employee = Hash_Function(employee->registration, hash_table->size);
+    index_employee = Hash_Function_LB(employee->registration, hash_table->size);
 
     original_index_employee = index_employee;
 
@@ -71,7 +139,7 @@ void Insert_Employee_LB(HashingTable *hash_table, Employee *employee){
 
 }
 
-//função 4: inicialização da tabela de hash
+//função para inicialização da tabela de hash
 void Initialize_Hash_Table(HashingTable *hash_table, int size){
 
     hash_table->size = size;
@@ -84,7 +152,7 @@ void Initialize_Hash_Table(HashingTable *hash_table, int size){
     }
 }
 
-//função 5: exibição para verificação dos dados dos funcionários na tabela de hash
+//função para exibição dos dados dos funcionários na tabela de hash
 void Show_Hash_Table(HashingTable *hash_table){
 
     for(int i = 0; i < hash_table->size; i++){
@@ -94,7 +162,7 @@ void Show_Hash_Table(HashingTable *hash_table){
     }
 }
 
-//função 6: liberação de memória alocada para a tabela de hash
+//função para liberação de memória alocada para a tabela de hash
 void Free_Hash_Table(HashingTable *hash_table){
 
     for(int i=0; i<hash_table->size; i++){
@@ -107,45 +175,13 @@ void Free_Hash_Table(HashingTable *hash_table){
 }
 
 
-//função 7: para fold shift com 3 dígitos (1o, 3o, 6o e 2o, 4o, 5o)
-int Hash_Function_LB(const char *registration, int table_size){
-    int part1, part2, hash_value;
+/*
 
-    part1 = (registration[0] - '0')*100 + (registration[2] - '0')*10 + (registration[5] - '0');
+anotações:
 
-    part2 = (registration[1] - '0')*100 + (registration[3] - '0')*10 + (registration[4] - '0');
-
-    hash_value = (part1 + part2) % table_size;
-
-    return hash_value;
-    
-}
-
-//função 8: para tratamento de colisções (lebra b)
-int Handle_Collision_LB(HashingTable *hash_table, const char *registration, int original_index){
-    int index_employee = original_index;
-
-    do{
-        index_employee = (index_employee + 7 % hash_table->size);
-        hash_table->collisions++;
-    }while (hash_table->table[index_employee].busy == 1 && index_employee != original_index);
-
-    return index_employee; 
-}
-
-//função 9: para tratamento de colisões (letra a)
-int Handle_Collision_LA(HashingTable *hash_table, const char *registration, int original_index){
-
-    int index_employee = original_index;
-
-    do{
-        index_employee = (index_employee + (registration[0] - '0')) % hash_table->size;
-        hash_table->collisions++;
-    }while(hash_table->table[index_employee].busy == 1 && index_employee != original_index);
-
-    return index_employee;
-}
+1. nas funções de colissões, deveria ter uma condição de parada mais para evitar loops infinitos em tabelas pequenas ou mal preenchidas?
 
 
+*/
 
 
