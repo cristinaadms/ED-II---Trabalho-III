@@ -4,84 +4,63 @@
 
 int main(){
 
+    
     HashingTable hash_table;
-    int option, table_initialized = 0;
+    Employee **employees;
+    int table_size, option, total_collisions, num_employees = 1000;
+    double insertion_time; 
 
     do{
-        printf("************* MENU *************");
-        printf("1. inicializacao da tabela de hash\n");
-        printf("2. inserir um funcionario\n");
-        printf("3. exibir tabela de hash\n");
-        printf("4. liberacao da tabela de hash\n");
-        printf("5. sair\n");
-        printf("********************************");
-        printf("selecione uma opcao: ");
+
+        printf("Tamanho da tabela de Hash (101 ou 150): ");
+        scanf("%d", &table_size);
+
+        if(table_size != 101 && table_size != 150){
+            printf("Tamanho invalido. Tente Novamente.\n");
+            continue;
+        }
+
+        Initialize_Hash_Table(&hash_table, table_size);
+
+        printf("************* CASO DE HASHING *************");
+        printf("1. Funcao Hashing Rotacao + Extracao de Digitos)\n");
+        printf("2. Funcao Hashing Fold Shift\n");
+        printf("3. sair\n");
+        printf("*******************************************");
+        printf("Selecione uma opcao: ");
         scanf("%d", &option);
 
         switch(option){
             case 1:
 
-                if(table_initialized){
-                    Free_Hash_Table(&hash_table);
-                }
-                
-                int size;
-                printf("Tamanho da tabela de hash (101 ou 150): ");
-                scanf("%d", &size);
-                //blindagem para a entrada do size
-
-                Initialize_Hash_Table(&hash_table, size);
-                table_initialized = 1;
-
-                printf("Tabela de Hash inicializada com tamanho %d.\n", size);
-                //blindagem para caso dê errado
-
+                insertion_time = Measure_Insertion_Performance(&hash_table, employees, num_employees,1);
+                total_collisions = Compare_Collisions(&hash_table,employees, num_employees,1);
+                printf("Desempenho: ");
+                printf("Tempo de Insercao: %.5f segundos\n", insertion_time);
+                printf("Numero de Colisoes: %d\n", total_collisions);
                 break;
+
             case 2:
 
-                //blindagem para quando não tiver a tabela inicializada
-
-                Employee *employee = (Employee*)malloc(sizeof(Employee));
-
-                //fazer blindagem em cada entrada
-                printf("Matricula de 6 digitos: ");
-                scanf("%s", employee->registration);
-                printf("Nome: ");
-                scanf(" %[^\n]", employee->name);
-                printf("Funcao: ");
-                scanf(" %[^\n]", employee->function);
-                printf("Salario: ");
-                scanf("%f", employee->salary);
-
-                Insert_Employee(&hash_table, employee);
-                printf("Funcionario inserido com sucesso.\n");
-                //blindagem para caso dê errado
+                insertion_time = Measure_Insertion_Performance(&hash_table, employees, num_employees,2);
+                total_collisions = Compare_Collisions(&hash_table,employees, num_employees,2);
+                printf("Desempenho: ");
+                printf("Tempo de Insercao: %.5f segundos\n", insertion_time);
+                printf("Numero de Colisoes: %d\n", total_collisions);
                 break;
-            case 3:
 
-                //blindagem para quando não tiver a tabela inicializada
-                Show_Hash_Table(&hash_table);
-                break;
-            case 4:
-                //blindagem para quando não tiver a tabela inicializada
-
-                Free_Hash_Table(&hash_table);
-                table_initialized = 0;
-
-                printf("Tabela de Hash liberada com sucesso.\n");
-                //blindagem para caso dê errado
-                break;
-            case 5:
-                if(table_initialized){
-                    Free_Hash_Table(&hash_table);
-                }
-                printf("programa encerrado.\n");
-                break;
             default:
                 printf("opcao invalida. tente novamente.\n");
                 break;
-        }        
-    }while(option != 5);
+        }
+
+        Show_Hash_Table(&hash_table);
+        printf("Deseja tentar novamente com um novo tamanho de tabela e hashing? (1 - Sim, 0 - Não): ");
+        scanf("%d", &option);
+
+    }while(option == 1);
+
+    //liberar memória
 
     return 0;
     
