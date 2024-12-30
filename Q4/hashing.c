@@ -101,6 +101,31 @@ int Hash_Function_LB(const char *registration, int table_size){
     
 }
 
+//função 8: para tratamento de colisções (lebra b)
+int Handle_Collision_LB(HashingTable *hash_table, const char *registration, int original_index){
+    int index_employee = original_index;
+
+    do{
+        index_employee = (index_employee + 7 % hash_table->size);
+        hash_table->collisions++;
+    }while (hash_table->table[index_employee].busy == 1 && index_employee != original_index);
+
+    return index_employee; 
+}
+
+//função 9: para tratamento de colisões (letra a)
+int Handle_Collision_LA(HashingTable *hash_table, const char *registration, int original_index){
+
+    int index_employee = original_index;
+
+    do{
+        index_employee = (index_employee + (registration[0] - '0')) % hash_table->size;
+        hash_table->collisions++;
+    }while(hash_table->table[index_employee].busy == 1 && index_employee != original_index);
+
+    return index_employee;
+}
+
 
 
 
