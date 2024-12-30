@@ -87,6 +87,20 @@ void Free_Hash_Table(HashingTable *hash_table){
 }
 
 
+//função 7: para fold shift com 3 dígitos (1o, 3o, 6o e 2o, 4o, 5o)
+int Hash_Function_LB(const char *registration, int table_size){
+    int part1, part2, hash_value;
+
+    part1 = (registration[0] - '0')*100 + (registration[2] - '0')*10 + (registration[5] - '0');
+
+    part2 = (registration[1] - '0')*100 + (registration[3] - '0')*10 + (registration[4] - '0');
+
+    hash_value = (part1 + part2) % table_size;
+
+    return hash_value;
+    
+}
+
 
 
 
